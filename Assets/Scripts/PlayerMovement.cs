@@ -8,41 +8,26 @@ using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : StateMachineCore
 {
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private BoxCollider2D groundCheck;
-    [SerializeField] private LayerMask groundMask;
-
-    List<State> states = new List<State>();
     [SerializeField] private IdleState idleState;
     [SerializeField] private RunState runState;
     [SerializeField] private AirState airState;
-    private State state;
 
-    public bool grounded { get; private set;}
     public float xInput { get; private set;}
     public bool jumpInput { get; private set;}
 
     void Start()
     {
-        states.Add(idleState);
-        states.Add(runState);
-        states.Add(airState);
-
-        foreach (State st in states)
-        {
-            st.Setup(rb, this);
-        }
-        
-        state = idleState;
+        SetupInstances();
+        machine.Set(idleState);
     }
     void Update()
     {
         CheckInput();
         HandleJump();
         SelectState();
-        state.Do();
+        machine.state.Do();
     }
     void CheckInput()
     {
@@ -51,48 +36,33 @@ public class PlayerMovement : MonoBehaviour
     }
     void HandleJump()
     {
-        if (jumpInput && grounded)
+        if (jumpInput && groundSensor.grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, airState.jumpSpeed);
         }
     }
     void SelectState()
     {
-        State oldState = state;
-
-        if (grounded)
+        if (groundSensor.grounded)
         {
             if (xInput == 0)
             {
-                state = idleState;
+                machine.Set(idleState);
             }
             else
             {
-                state = runState;
+                machine.Set(runState);
             }
         }
         else
         {
-            state = airState;
-        }
-
-        if (oldState != state || oldState.isComplete)
-        {
-            oldState.Exit();
-            state.Initialise();
-            state.Enter();  
+            machine.Set(airState);
         }
     }
     void FixedUpdate()
     {
-        CheckGround();
         HandleXMovement();
         ApplyFriction();
-    }
-    void CheckGround()
-    {
-        // Using the collider more like a rectangule to check collision
-        grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
     }
     void HandleXMovement()
     {
@@ -117,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Decreases the horizontal speed only when grounded and not moving horizontally 
         // The y axis velocity check its to prevent a sticky felling while jumping
-        if (grounded && xInput == 0 && rb.velocity.y <= 0)
+        if (groundSensor.grounded && xInput == 0 && rb.velocity.y <= 0)
         {
             rb.velocity *= runState.groundDecay;
         }

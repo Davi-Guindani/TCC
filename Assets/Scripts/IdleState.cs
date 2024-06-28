@@ -10,7 +10,7 @@ public class IdleState : State
     }
     public override void Do()
     {
-        if (!input.grounded)
+        if (!groundSensor.grounded)
         {
             isComplete = true;
         }
