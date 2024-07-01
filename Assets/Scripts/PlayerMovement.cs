@@ -20,7 +20,7 @@ public class PlayerMovement : StateMachineCore
     void Start()
     {
         SetupInstances();
-        machine.Set(idleState);
+        Set(idleState);
     }
     void Update()
     {

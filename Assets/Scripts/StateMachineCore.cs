@@ -9,7 +9,12 @@ public abstract class StateMachineCore : MonoBehaviour
     public Rigidbody2D rb;
     // public Animator animator;
     public GroundSensor groundSensor;
+    public State state => machine.state;
 
+    protected void Set(State newState, bool forceReset = false)
+    {
+        machine.Set(newState, forceReset);
+    }
     public void SetupInstances()
     {
         machine = new StateMachine();

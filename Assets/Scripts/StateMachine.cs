@@ -12,7 +12,7 @@ public class StateMachine
         {
             state?.Exit();
             state = newState;
-            state.Initialise();
+            state.Initialise(state.machine);
             state.Enter();
         }
     }

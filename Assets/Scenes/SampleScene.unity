@@ -663,6 +663,7 @@ GameObject:
   - component: {fileID: 1493803667}
   - component: {fileID: 1493803668}
   - component: {fileID: 1493803669}
+  - component: {fileID: 1493803670}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -729,13 +730,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1493803668}
+  groundSensor: {fileID: 1493803670}
+  idleState: {fileID: 663046267}
+  runState: {fileID: 408607329}
+  airState: {fileID: 2045535994}
+--- !u!114 &1493803670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493803665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e31d86a15564ac49be5e6527ae78f75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   groundCheck: {fileID: 458468195}
   groundMask:
     serializedVersion: 2
     m_Bits: 128
-  idleState: {fileID: 663046267}
-  runState: {fileID: 408607329}
-  airState: {fileID: 2045535994}
 --- !u!1 &1579316014
 GameObject:
   m_ObjectHideFlags: 0
